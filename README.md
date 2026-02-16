@@ -24,11 +24,15 @@ Proyecto personal de documentación y ejemplos sobre técnicas de desarrollo mod
 
 Consultar la documentación de cada módulo específico.
 
+---
+
 ## 📄 Licencia
 
 MIT — contribuciones bienvenidas 🚀
 
 ---
+
+## 💻 Creado Por
 
 🧑‍💻 Isaac Haro
 
@@ -38,7 +42,3 @@ Isaac Esteban Haro Torres
 - 📧 zackharo1@gmail.com
 - 📱 098805517
 - 💻 [GitHub](https://github.com/ieharo1)
-
-Licencia
-
-MIT — contribuciones bienvenidas 🚀
