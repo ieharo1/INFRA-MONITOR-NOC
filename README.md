@@ -1,44 +1,24 @@
-# VIBE-CODING
+# 💻 VIBE CODING
 
-Guía y recursos para desarrollo con estilo y mentalidad "vibe coding".
-
-## 📖 Descripción
-
-Proyecto personal de documentación y ejemplos sobre técnicas de desarrollo moderno, automatización y mejores prácticas de código.
-
-## 🛠️ Tecnologías
-
-- Python
-- JavaScript
-- Docker
-- APIs REST
-
-## 🚀 Características
-
-- Ejemplos de código limpio y mantenible
-- Patrones de diseño comunes
-- Automatización de tareas
-- Configuraciones de entorno
-
-## 📦 Instalación
-
-Consultar la documentación de cada módulo específico.
+Guía y recursos para desarrollo con estilo y mentalidad "vibe coding" desarrollada por **Isaac Esteban Haro Torres**.
 
 ---
 
-## 📄 Licencia
+## 📝 Descripción
 
-MIT — contribuciones bienvenidas 🚀
+Proyectos y recursos relacionados con Vibe Coding.
 
 ---
 
-## 💻 Creado Por
+## 👨‍💻 Desarrollado por Isaac Esteban Haro Torres
 
-🧑‍💻 Isaac Haro
+**Ingeniero en Sistemas · Full Stack · Automatización · Data**
 
-Ingeniero en Sistemas · Full Stack · Automatización · Data
+- 📧 Email: zackharo1@gmail.com
+- 📱 WhatsApp: 098805517
+- 💻 GitHub: https://github.com/ieharo1
+- 🌐 Portafolio: https://ieharo1.github.io/portafolio-isaac.haro/
 
-Isaac Esteban Haro Torres
-- 📧 zackharo1@gmail.com
-- 📱 098805517
-- 💻 [GitHub](https://github.com/ieharo1)
+---
+
+© 2026 Isaac Esteban Haro Torres - Todos los derechos reservados.
