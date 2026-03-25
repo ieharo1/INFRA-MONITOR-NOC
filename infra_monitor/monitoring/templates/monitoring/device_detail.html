@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Detalle {{ device.name }}{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-12 col-xl-4">
+    <div class="card bg-dark border-secondary">
+      <div class="card-header">Ficha de equipo</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-dark text-light">Nombre: {{ device.name }}</li>
+          <li class="list-group-item bg-dark text-light">IP: {{ device.management_ip }}</li>
+          <li class="list-group-item bg-dark text-light">Tipo: {{ device.get_device_type_display }}</li>
+          <li class="list-group-item bg-dark text-light">Vendor/Modelo: {{ device.vendor }} {{ device.model }}</li>
+          <li class="list-group-item bg-dark text-light">OS: {{ device.os_version }}</li>
+          <li class="list-group-item bg-dark text-light">Último visto: {{ device.last_seen }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-xl-8">
+    <div class="card bg-dark border-secondary mb-3">
+      <div class="card-header">Checks de servicio</div>
+      <div class="table-responsive"><table class="table table-dark mb-0"><thead><tr><th>Nombre</th><th>Tipo</th><th>Destino</th><th>Estado</th><th>Latencia</th><th>Última verificación</th></tr></thead><tbody>{% for c in checks %}<tr><td>{{ c.name }}</td><td>{{ c.get_check_type_display }}</td><td>{{ c.target_host }}{% if c.target_port %}:{{ c.target_port }}{% endif %}</td><td><span class="badge {% if c.status == 'up' %}bg-success{% else %}bg-danger{% endif %}">{{ c.status|upper }}</span></td><td>{{ c.latency_ms|default:'-' }}</td><td>{{ c.checked_at|default:'-' }}</td></tr>{% endfor %}</tbody></table></div>
+    </div>
+    <div class="card bg-dark border-secondary">
+      <div class="card-header">Puertos</div>
+      <div class="table-responsive"><table class="table table-dark mb-0"><thead><tr><th>Puerto</th><th>VLAN</th><th>Velocidad</th><th>Conectado a</th><th>Estado</th></tr></thead><tbody>{% for p in ports %}<tr><td>{{ p.name }}</td><td>{{ p.vlan }}</td><td>{{ p.speed_mbps }} Mbps</td><td>{{ p.connected_device.name|default:'-' }}</td><td>{{ p.get_state_display }}</td></tr>{% empty %}<tr><td colspan="5" class="text-secondary text-center">Sin puertos</td></tr>{% endfor %}</tbody></table></div>
+    </div>
+  </div>
+</div>
+<div class="card bg-dark border-secondary mt-3">
+  <div class="card-header">Eventos recientes</div>
+  <div class="table-responsive"><table class="table table-dark mb-0"><thead><tr><th>Severidad</th><th>Mensaje</th><th>Fecha</th></tr></thead><tbody>{% for e in events %}<tr><td>{{ e.get_severity_display }}</td><td>{{ e.message }}</td><td>{{ e.created_at }}</td></tr>{% empty %}<tr><td colspan="3" class="text-secondary text-center">Sin eventos</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

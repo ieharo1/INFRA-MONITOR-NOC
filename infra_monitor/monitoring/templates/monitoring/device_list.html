@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Inventario{% endblock %}
+{% block content %}
+<div class="card bg-dark border-secondary mb-3">
+  <div class="card-body">
+    <form class="row g-2">
+      <div class="col-12 col-md-4">{{ form.q.label_tag }} {{ form.q }}</div>
+      <div class="col-6 col-md-3">{{ form.status.label_tag }} {{ form.status }}</div>
+      <div class="col-6 col-md-3">{{ form.device_type.label_tag }} {{ form.device_type }}</div>
+      <div class="col-12 col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Filtrar</button></div>
+    </form>
+  </div>
+</div>
+<div class="card bg-dark border-secondary">
+  <div class="table-responsive">
+    <table class="table table-dark table-striped mb-0">
+      <thead><tr><th>Nombre</th><th>Tipo</th><th>IP Gestión</th><th>Sede</th><th>Rack</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+      {% for device in devices %}
+        <tr>
+          <td>{{ device.name }}</td>
+          <td>{{ device.get_device_type_display }}</td>
+          <td>{{ device.management_ip }}</td>
+          <td>{{ device.site.name }}</td>
+          <td>{{ device.rack.name|default:'-' }}</td>
+          <td><span class="badge {% if device.status == 'up' %}bg-success{% elif device.status == 'down' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ device.get_status_display }}</span></td>
+          <td><a href="/devices/{{ device.id }}/" class="btn btn-sm btn-outline-info">Ver</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="7" class="text-center text-secondary">No hay equipos</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

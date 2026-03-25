@@ -1,29 +1,21 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim as base
+FROM python:3.11-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV POETRY_NO_INTERACTION 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Set work directory
 WORKDIR /app
 
-# Install poetry
-RUN pip install poetry
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libpq-dev iputils-ping netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy only the dependency file to leverage Docker layer caching
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml poetry.lock ./
+RUN pip install --no-cache-dir poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --only main --no-root
 
-# Install dependencies
-# --no-root: Do not install the project itself, only the dependencies
-RUN poetry install --no-root --no-dev
-
-# Copy the rest of the application code
 COPY . .
 
-# Install the project itself in editable mode
-RUN poetry install --no-dev
+WORKDIR /app/infra_monitor
 
-# Expose the port the app runs on
-EXPOSE 8000
+CMD ["gunicorn", "infra_monitor.wsgi:application", "--bind", "0.0.0.0:8000"]

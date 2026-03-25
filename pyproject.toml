@@ -1,29 +1,20 @@
 [tool.poetry]
 name = "vibe-coding"
 version = "0.1.0"
-description = "Enterprise inventory system with AI-powered features."
-authors = ["Your Name <you@example.com>"]
+description = "Sistema de gestión y monitoreo de infraestructura TI con Django."
+authors = ["Isaac Esteban Haro Torres <zackharo1@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "^0.109.2"
-uvicorn = {extras = ["standard"], version = "^0.27.1"}
-sqlalchemy = "^2.0.27"
-alembic = "^1.13.1"
+django = "^5.1.6"
+gunicorn = "^22.0.0"
 psycopg2-binary = "^2.9.9"
 celery = "^5.3.6"
 redis = "^5.0.1"
-python-dotenv = "^1.0.1"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-pydantic-settings = "^2.2.1"
-bcrypt = "^4.1.2"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.1"
-httpx = "^0.27.0"
 black = "^24.2.0"
 ruff = "^0.2.2"
 

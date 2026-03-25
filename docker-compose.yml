@@ -1,42 +1,31 @@
-version: '3.8'
+version: '3.9'
 
 services:
   db:
     image: postgres:15-alpine
-    container_name: vibe_coding_db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: ${POSTGRES_DB:-vibe_coding_db}
+      POSTGRES_USER: ${POSTGRES_USER:-infra_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-infra_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-infra_monitor}
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-infra_user}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   redis:
     image: redis:7-alpine
-    container_name: vibe_coding_redis
+    command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
-  backend:
+  web:
     build: .
-    container_name: vibe_coding_backend
     env_file:
       - .env
-    command: uvicorn vibe_coding.main:app --host 0.0.0.0 --port 8000 --reload
+    command: bash -c "python /app/infra_monitor/manage.py migrate && python /app/infra_monitor/manage.py collectstatic --noinput && python /app/infra_monitor/manage.py seed_demo && gunicorn infra_monitor.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
@@ -45,7 +34,27 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_healthy
+        condition: service_started
+
+  worker:
+    build: .
+    env_file:
+      - .env
+    command: bash -c "cd /app/infra_monitor && celery -A infra_monitor worker -l info"
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+
+  beat:
+    build: .
+    env_file:
+      - .env
+    command: bash -c "cd /app/infra_monitor && celery -A infra_monitor beat -l info"
+    volumes:
+      - .:/app
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
