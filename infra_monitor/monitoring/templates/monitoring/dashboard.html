@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard NOC{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card bg-primary"><div class="card-body"><h2>{{ total_devices }}</h2><p class="mb-0">Equipos Totales</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card bg-success"><div class="card-body"><h2>{{ up_devices }}</h2><p class="mb-0">Operativos</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card bg-danger"><div class="card-body"><h2>{{ down_devices }}</h2><p class="mb-0">Caídos</p></div></div></div>
+  <div class="col-6 col-md-3"><div class="card bg-warning text-dark"><div class="card-body"><h2>{{ degraded_devices }}</h2><p class="mb-0">Degradados</p></div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card bg-dark border-secondary h-100">
+      <div class="card-header">Eventos abiertos</div>
+      <div class="table-responsive">
+        <table class="table table-dark table-striped mb-0">
+          <thead><tr><th>Equipo</th><th>Severidad</th><th>Mensaje</th><th>Fecha</th></tr></thead>
+          <tbody>
+            {% for event in open_events %}
+              <tr><td>{{ event.device.name }}</td><td>{{ event.get_severity_display }}</td><td>{{ event.message }}</td><td>{{ event.created_at }}</td></tr>
+            {% empty %}
+              <tr><td colspan="4" class="text-center text-secondary">Sin alertas</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6">
+    <div class="card bg-dark border-secondary h-100">
+      <div class="card-header">Últimas métricas</div>
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0">
+          <thead><tr><th>Equipo</th><th>CPU%</th><th>RAM%</th><th>Disco%</th><th>RX/TX Mbps</th></tr></thead>
+          <tbody>
+            {% for metric in last_metrics %}
+              <tr><td>{{ metric.device.name }}</td><td>{{ metric.cpu_percent }}</td><td>{{ metric.memory_percent }}</td><td>{{ metric.disk_percent }}</td><td>{{ metric.rx_mbps }}/{{ metric.tx_mbps }}</td></tr>
+            {% empty %}
+              <tr><td colspan="5" class="text-center text-secondary">Aún no hay métricas</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card bg-dark border-secondary mt-3">
+  <div class="card-header">Inventario por tipo</div>
+  <div class="card-body">
+    <div class="row g-2">
+      {% for stat in type_stats %}
+        <div class="col-12 col-md-3"><div class="alert alert-secondary mb-0 d-flex justify-content-between"><span>{{ stat.device_type }}</span><span class="badge bg-info">{{ stat.total }}</span></div></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
